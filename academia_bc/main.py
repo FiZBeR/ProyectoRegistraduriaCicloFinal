@@ -23,7 +23,12 @@ print(base.list_collection_names())
 
 #Controladores
 from Controladores.EstudianteControler import EstudianteControler
+from Controladores.MateriaControlador import MateriaControlador
+from Controladores.InscripcionControlador import InscripcionControlador
 controladorEstudiante = EstudianteControler()
+controladorMateria = MateriaControlador()
+controladorInscripcion = InscripcionControlador()
+
 
     #Micro servicio de Creacion
 @app.route("/estudiantes",methods=['POST'])
@@ -56,6 +61,18 @@ def actualizarEstudiante(id):
 def borrarEstudiante(id):
     json = controladorEstudiante.delete(id)
     return jsonify(json)
+
+@app.route("/materia/<string:id_materia>/departamento/<string:id_departamento>",methods=['PUT'])
+def asignarDepartamento(id_materia, id_departamento):
+    json = controladorMateria.asignarDepartamento(id_materia, id_departamento)
+    return jsonify(json)
+
+@app.route("/inscripciones/estudiante/<string:id_estudiante>/materia/<string:id_materia>",methods=['POST'])
+def crearInscripcion(id_estudiante, id_materia):
+    datos = request.get_json()
+    json = controladorInscripcion.create(datos, id_estudiante, id_materia)
+    return jsonify(json)
+
 
 @app.route("/",methods=['GET'])
 def msPrueba():

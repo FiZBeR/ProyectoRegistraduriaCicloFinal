@@ -9,6 +9,7 @@ import json
 'La declaracion del Objeto T y es que el que recibe nuestro repositorio Interface, es una manera en la que le deciomos'''
 'que va a recibir un objeto y decirle al programa que la declaracion de cad objeto es un tipo estandar y aplica para todos'''
 'los modelos que se comporten de esa forma '''
+
 T = TypeVar('T')
 class RepositorioInterface(Generic[T]):
 
@@ -17,6 +18,7 @@ class RepositorioInterface(Generic[T]):
         configData = self.cargueConfigFile()
         clientDb = pymongo.MongoClient(configData["bd=connection"], tlsCAFile=ca)
         self.baseDatos = clientDb[configData["bd-name"]]
+        print(self.__orig_bases__)
         clase = get_args(self.__orig_bases__[0])
         self.coleccion = clase[0].__name__.lower()
 
