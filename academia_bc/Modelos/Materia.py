@@ -4,4 +4,3 @@ class Materia(ModeloAbstracto):
     pass
 
 
-hgyhyhy
