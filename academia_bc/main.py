@@ -73,12 +73,32 @@ def crearInscripcion(id_estudiante, id_materia):
     json = controladorInscripcion.create(datos, id_estudiante, id_materia)
     return jsonify(json)
 
+@app.router("/inscripciones/materia/<string:id_materia>", methods=['GET'])
+def isncritosEnMateria(id_materia):
+    json = controladorInscripcion.consultarInscritosPorMateria(id_materia)
+    return jsonify(json)
 
+@app.router("/inscripciones/materia", methods=['GET'])
+def mejorNotaEnMateria(id_materia):
+    json = controladorInscripcion.consultarMejorNotaEnMateria(id_materia)
+    return jsonify(json)
+
+@app.router("/inscripciones/Promedio_notas/<string:id_materia>", methods=['GET'])
+def mejorNotaEnMateria(id_materia):
+    json = controladorInscripcion.consultarNotaPromedio(id_materia)
+    return jsonify(json)
+
+@app.router("/inscripciones/Sumatoria_notas/<string:id_materia>", methods=['GET'])
+def mejorNotaEnMateria(id_materia):
+    json = controladorInscripcion.consultarSumatoriaNotas(id_materia)
+    return jsonify(json)
 @app.route("/",methods=['GET'])
 def msPrueba():
     json = {}
     json["message"] = "Mi primer micro servico con Flask"
     return jsonify(json)
+
+
 
 def cargueConfigFile():
     with open('config.json') as file:

@@ -38,6 +38,10 @@ class InscripcionControler():
         insActual.año = inscripcion["año"]
         insActual.semestre = inscripcion["semestre"]
         insActual.NotaFinal = inscripcion["NotaFinal"]
+        estudiante = Estudiante(self.repoEstudiante.findById(id_estudiante))
+        materia = Materia(self.repoMateria.findById(id_materia))
+        inscripcion.estudiante = estudiante
+        inscripcion.materia = Materia
         return self.inscripcionRepositorio.save(insActual)
 
     'Consulta'
@@ -45,3 +49,19 @@ class InscripcionControler():
         print("Consultando la inscripcion: ", id)
         inscripcion = Inscripcion(self.inscripcionRepositorio.findById(id))
         return inscripcion.__dict__
+
+
+
+    def consultarInscritosPorMateria(self, id_materia):
+        print("Consultando Inscritos a materia")
+        return self.repoInscripcion.getInscripciosMateria(id_materia)
+
+    def consultarNotaPromedio(self, id_materia):
+        print("Consultando la nota promedio de la materia")
+        return self.repoInscripcion.getNotaPromedio(id_materia)
+
+    def consultarSumatoriaNotas(self, id_materia):
+        print("Consultando la Suma de las nota de la materia")
+        return self.repoInscripcion.getSumatoriaNotas(id_materia)
+
+
