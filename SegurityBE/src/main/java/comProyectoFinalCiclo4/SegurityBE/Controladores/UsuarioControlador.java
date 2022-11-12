@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -78,6 +79,25 @@ public class UsuarioControlador {
             return null;
         }
     }
+
+    /*Verificacion de Credenciales*/
+    @PostMapping("/validar")
+    public Usuario validar(@RequestBody Usuario usuario, final HttpServletResponse rta) throws IOException {
+        Usuario usr = this.repositorio.getUsuarioPorCorreo(usuario.getCorreo());
+        String clave = convertirSHA256(usuario.getClave());
+
+        if(usr != null && clave.equals(usr.getClave())) {
+            usr.setClave("");
+            return  usr;
+        } else {
+            rta.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return null;
+        }
+    }
+
+
+
+
 
 
     //cifrado de clave

@@ -7,6 +7,7 @@ import comProyectoFinalCiclo4.SegurityBE.Repositorios.PermisoRepositorio;
 import comProyectoFinalCiclo4.SegurityBE.Repositorios.PermisosRolRepositorio;
 import comProyectoFinalCiclo4.SegurityBE.Repositorios.RolRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 public class PermisosRolControlador {
 
@@ -46,6 +47,19 @@ public class PermisosRolControlador {
     /*
     Los microservicios de listado, consulta, borrado etc se implementan de manera similar al de usuario
      */
+
+
+    @GetMapping("validar-permiso/rol/{id_rol}")
+    public PermisosRol getPermiso(@PathVariable String id_rol, @RequestBody Permiso dataPermiso){
+        Rol r = this.repositorioRol.findById(id_rol);
+        Permiso p = this.repositorioPermisos.getPermiso(dataPermiso.getUrl(), dataPermiso.getMetodo());
+
+        if(r != null && p != null){
+            return this.repositorioPermisosRol.getPermisosRol(r.getId(), p.getId());
+        } else {
+            return  null;
+        }
+    }
 
 
 }
