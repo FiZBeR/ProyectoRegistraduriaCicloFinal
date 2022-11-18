@@ -2,6 +2,6 @@
   "url-backend":"127.0.0.1",
   "port": 9999,
 
-  "bd=connection": "mongodb+srv://CristianNew3:Ozzy19780Zeppelin@cluster0.h1ic9da.mongodb.net/Cliclo4A?retryWrites=true&w=majority",
-  "bd-name": "academia-c4"
+  "bd=connection": "mongodb+srv://CristianNew3:Ozzy19780Zeppelin@cluster0.h1ic9da.mongodb.net/ProyectoCiclo4?retryWrites=true&w=majority",
+  "bd-name": "ProyectoCiclo4"
 }

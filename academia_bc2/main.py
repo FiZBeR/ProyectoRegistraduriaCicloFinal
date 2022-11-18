@@ -7,13 +7,214 @@ from flask_cors import CORS
 import json
 from waitress import serve
 
+#importar los controladores para las exposiciones
+from Controladores.CandidatoController import CandidatoController
+from Controladores.PartidosPoliticosController import PartidoPoliticoController
+from Controladores.ResultadosController2 import ResultadosController
+
+controladorCandidato = CandidatoController()
+controladorPartidoPoli = PartidoPoliticoController()
+controladorResultados = ResultadosController
+
 #
 app=Flask(__name__)
 cors= CORS(app)
 
+#Conexion Base de Datos
+ca = certifi.where()
+clienteDb = pymongo.MongoClient("mongodb+srv://CristianNew3:Ozzy19780Zeppelin@cluster0.h1ic9da.mongodb.net/ProyectoCiclo4?retryWrites=true&w=majority", tlsCAFile=ca)
+Db = clienteDb.test
+print(Db)
+
+base = clienteDb["ProyectoCiclo4"]
+print(base.list_collection_names())
 
 
 
+#Ejemplos de Expocision de microservicios----------------Creacion de Candidatos---------------------------------------------------------------
+from Controladores.CandidatoController import CandidatoController
+controladorCandidato = CandidatoController()
+
+# Microservicio de Crearcion
+@app.route("/candidatos", methods=['POST'])
+def crearCandidato():
+    datos = request.get_json()
+    json = controladorCandidato.create(datos)
+    return jsonify(json)
+
+# Microservicio de Listado
+@app.route("/candidatos", methods=['GET'])
+def getCandidatos():
+    json = controladorCandidato.index()
+    return jsonify(json)
+
+# Microservicio de Borrar
+@app.route("/candidatos/<string:cedula>", methods=['DELETE'])
+def borrarCandidato(cedula):
+    json = controladorCandidato.delete(cedula)
+    return jsonify(json)
+
+# Microservicio de Actualizar
+@app.route("/candidatos/<string:cedula>", methods=['PUT'])
+def actualizarCandidato(cedula):
+    datos = request.get_json()
+    json = controladorCandidato.update(cedula, datos)
+    return jsonify(json)
+
+# Microservicio de Consulta
+@app.route("/candidatos/<string:cedula>", methods=['GET'])
+def getCandidato(cedula):
+    json = controladorCandidato.show(cedula)
+    return jsonify(json)
+
+
+#Creacion de Partido Politico---------------------------------------------------------------
+
+from Controladores.PartidosPoliticosController import PartidoPoliticoController
+controladorPartidoPolitico = PartidoPoliticoController()
+
+#Crearcion
+@app.route("/partidopolitico", methods=['POST'])
+def crearPartido():
+    datos = request.get_json()
+    json = controladorPartidoPolitico.create(datos)
+    return jsonify(json)
+
+#Listado
+@app.route("/partidopolitico", methods=['GET'])
+def getPartidos():
+    json = controladorPartidoPolitico.index()
+    return jsonify(json)
+
+#Borrar
+@app.route("/partidopolitico/<string:codigo>", methods=['DELETE'])
+def borrarPartido(codigo):
+    json = controladorPartidoPolitico.delete(codigo)
+    return jsonify(json)
+
+#Actualizar
+@app.route("/partidopolitico/<string:codigo>", methods=['PUT'])
+def actualizarPartido(codigo):
+    datos = request.get_json()
+    json = controladorPartidoPolitico.update(codigo, datos)
+    return jsonify(json)
+
+#Consulta
+@app.route("/partidopolitico/<string:codigo>", methods=['GET'])
+def getPartido(codigo):
+    json = controladorPartidoPolitico.show(codigo)
+    return jsonify(json)
+
+#Creacion de Mesas---------------------------------------------------------------
+
+from Controladores.MesasController import MesasController
+controladorMesas = MesasController()
+
+#Crearcion
+@app.route("/mesas", methods=['POST'])
+def crearMesas():
+    datos = request.get_json()
+    json = controladorMesas.create(datos)
+    return jsonify(json)
+
+#Listado
+@app.route("/mesas", methods=['GET'])
+def getMesas():
+    json = controladorMesas.index()
+    return jsonify(json)
+
+#Borrar
+@app.route("/mesas/<string:numero>", methods=['DELETE'])
+def borrarMesas(numero):
+    json = controladorMesas.delete(numero)
+    return jsonify(json)
+
+#Actualizar
+@app.route("/mesas/<string:numero>", methods=['PUT'])
+def actualizarMesas(numero):
+    datos = request.get_json()
+    json = controladorMesas.update(numero, datos)
+    return jsonify(json)
+
+#Consulta
+@app.route("/mesas/<string:numero>", methods=['GET'])
+def getMesa(numero):
+    json = controladorMesas.show(numero)
+    return jsonify(json)
+
+#Creacion de Resultados---------------------------------------------------------------
+
+from Controladores.ResultadosController2 import ResultadosController
+controladorResultados = ResultadosController()
+
+#Crearcion
+@app.route("/resultados", methods=['POST'])
+def crearResultados():
+    datos = request.get_json()
+    json = controladorResultados.create(datos)
+    return jsonify(json)
+
+#Listado
+@app.route("/resultados", methods=['GET'])
+def getResultados():
+    json = controladorResultados.index()
+    return jsonify(json)
+
+#Borrar
+@app.route("/resultados/<string:id>", methods=['DELETE'])
+def borrarResultados(id):
+    json = controladorResultados.delete(id)
+    return jsonify(json)
+
+#Actualizar
+@app.route("/resultados/<string:id>", methods=['PUT'])
+def actualizarResultados(id):
+    datos = request.get_json()
+    json = controladorResultados.update(id, datos)
+    return jsonify(json)
+
+#Consulta
+@app.route("/resultados/<string:id>", methods=['GET'])
+def getResultado(id):
+    json = controladorResultados.show(id)
+    return jsonify(json)
+#-----------------------------------------------------------------------------------------------------------------
+#Exponer Servicios
+
+@app.route("/partidopoliticos/<string:id_codigo>/candidato/<string:id_cedula>", methods=['PUT'])
+def asignarpartidoPoli(id_codigo, id_cedula):
+    json = controladorCandidato.asignarPartidoPolitico(id_cedula, id_codigo)
+    return jsonify(json)
+
+@app.route("/Resultado/candidato/<string:id_cedula>/PartidoPolitico/<string:id_codigo>", methods=['POST'])
+def crearResultado(id_cedula, id_codigo):
+    datos = request.get_json()
+    json = controladorResultados.create(datos, id_cedula, id_codigo)
+    return jsonify(json)
+
+# Microservisios de consultas especiales----------------------------------------------------------
+
+@app.route("/resultados/candidato/<string:id_cedula>", methods=['GET'])
+def isncritosEnCandiadtos(id_cedula):
+    json = controladorResultados.consultarInscritosCandidatos(id_cedula)
+    return jsonify(json)
+
+@app.route("/resultados/candidato", methods=['GET'])
+def mejorVotacionEnCandidato(id_materia):
+    json = controladorResultados.consultarMayorCandidato()
+    return jsonify(json)
+
+@app.route("/resultados/Promedio_notas/<string:id_cedula>", methods=['GET'])
+def promediocandidatos(id_cedula):
+    json = controladorResultados.consulatrSumatoriaVotos(id_cedula)
+    return jsonify(json)
+
+@app.route("/inscripciones/Sumatoria_notas/<string:id_cedula>", methods=['GET'])
+def mayorSumatoria(id_cedula):
+    json = controladorResultados.consulatrSumatoriaVotos(id_cedula)
+    return jsonify(json)
+
+#Pruebas-----------------------------------------------------------------------------------------------------------------------------------------
 @app.route("/", methods=['GET'])
 def msPrueba():
     json = {}
