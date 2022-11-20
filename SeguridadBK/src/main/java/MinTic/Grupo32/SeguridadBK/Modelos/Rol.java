@@ -1,9 +1,8 @@
-package comProyectoFinalCiclo4.SegurityBE.Modelos;
+package MinTic.Grupo32.SeguridadBK.Modelos;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document()
 public class Rol {
-
     private String id;
     private String nombre;
 

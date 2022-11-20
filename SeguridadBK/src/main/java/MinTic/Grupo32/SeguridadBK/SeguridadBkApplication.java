@@ -1,13 +1,13 @@
-package comProyectoFinalCiclo4.SegurityBE;
+package MinTic.Grupo32.SeguridadBK;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SegurityBeApplication {
+public class SeguridadBkApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SegurityBeApplication.class, args);
+		SpringApplication.run(SeguridadBkApplication.class, args);
 	}
 
 }

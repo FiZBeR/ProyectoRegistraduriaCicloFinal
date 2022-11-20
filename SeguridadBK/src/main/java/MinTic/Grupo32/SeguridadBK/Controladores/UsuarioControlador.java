@@ -1,23 +1,28 @@
-package comProyectoFinalCiclo4.SegurityBE.Controladores;
+package MinTic.Grupo32.SeguridadBK.Controladores;
 
-import comProyectoFinalCiclo4.SegurityBE.Modelos.Usuario;
-import comProyectoFinalCiclo4.SegurityBE.Modelos.Rol;
-import comProyectoFinalCiclo4.SegurityBE.Repositorios.PermisosRolRepositorio;
-import comProyectoFinalCiclo4.SegurityBE.Repositorios.RolRepositorio;
-import comProyectoFinalCiclo4.SegurityBE.Repositorios.UsuarioRepositorio;
+
+import MinTic.Grupo32.SeguridadBK.Modelos.Usuario;
+import MinTic.Grupo32.SeguridadBK.Modelos.Rol;
+import MinTic.Grupo32.SeguridadBK.Repositorios.PermisosRolRepositorio;
+import MinTic.Grupo32.SeguridadBK.Repositorios.RolRepositorio;
+import MinTic.Grupo32.SeguridadBK.Repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping;/*Para que sirve*/
+import org.springframework.http.HttpStatus;/*Para que sirve*/
+import org.springframework.web.bind.annotation.*;/*Para que sirve*/
 
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import javax.servlet.http.HttpServletResponse;/*Para que sirve*/
+import java.io.IOException;/*Para que sirve*/
+import java.security.MessageDigest;/*Para que sirve*/
+import java.security.NoSuchAlgorithmException;/*Para que sirve*/
 import java.util.List;
+
 
 @CrossOrigin //Que son las referencias cruzadas
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/usuarios")/*Aca estamos definiendo una ruta principal para los demas servicios con eso no las tenemos que volver a declarar si no para darle una extencion como es en el caso de la linea 46*/
 public class UsuarioControlador {
 
     //Inyeccion de dependencias
@@ -25,21 +30,22 @@ public class UsuarioControlador {
     private UsuarioRepositorio repositorio;
     @Autowired
     private RolRepositorio rolRepositorio;
-
-
+/*Microservicios de usuarios------------------------------------------------------------------------------------*/
+    /*Obtener todo*/
     @GetMapping("")
     public List<Usuario> index() {
+
         return this.repositorio.findAll();
     }
-
+/*Crear*/
     @PostMapping
-    public Usuario create(@RequestBody Usuario dataUsuario){
+    public Usuario create(@RequestBody Usuario dataUsuario){ /*para poder utilizar los datos que vienen en la anotacion usamos requetbody*/
         dataUsuario.setClave(convertirSHA256(dataUsuario.getClave())); //que es convertirSHA256
         return this.repositorio.save(dataUsuario);
     }
 
     @PutMapping("{id}")
-    public Usuario update(@PathVariable String id, @Requestbody Usuario dataUsuario){
+    public Usuario update(@PathVariable String id, @RequestBody Usuario dataUsuario){
         Usuario usuario = this.repositorio.findById(id).orElse(null);
         if(usuario != null){
             usuario.setSeudonimo((dataUsuario.getSeudonimo()));
@@ -57,7 +63,7 @@ public class UsuarioControlador {
         return us;
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NO_CONTENT)/*Para lo quenos ayuda esta anotacion es para qu a nivel del cliente se responda que no se hayo contenido respecto al string solicitado*/
     @DeleteMapping("{id}")
     public void delete(@PathVariable String id){
         Usuario us = this.repositorio.findById(id).orElse(null);
@@ -65,12 +71,12 @@ public class UsuarioControlador {
             this.repositorio.delete(us);
         }
     }
-
+/**/
     //Asignar Rol
     @PutMapping("{id}/rol/{id_rol}")
     public Usuario asignarRolAUsuario(@PathVariable String id, @PathVariable String id_rol){
-        Usuario usr = this.repositorio.findById(id).orElse(null);
-        Rol rol = this.rolRepositorio.findById(id).orElse(null);
+        Usuario usr = this.repositorio.findById(id).orElse(null);/*Consultamos el usuario*/
+        Rol rol = this.rolRepositorio.findById(id).orElse(null);/**/
 
         if(usr != null && rol != null){
             usr.setRol(rol);
@@ -103,7 +109,7 @@ public class UsuarioControlador {
     //cifrado de clave
     private String convertirSHA256(String clave){
         //libreria propia para manejo y cifrados
-        MessageDigest ms = null;
+        MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException ex) {
@@ -118,3 +124,9 @@ public class UsuarioControlador {
         return sb.toString();
     }
 }
+
+/*
+* Creamos un metodo string que se llama convertirSHA256 que resive un string clave, usamos una libreria exclusiva
+* para el manejo de cifrados MessageDigestm, le creamos una variable y despues un try donde tengamos una excepcion
+* controlada
+* */

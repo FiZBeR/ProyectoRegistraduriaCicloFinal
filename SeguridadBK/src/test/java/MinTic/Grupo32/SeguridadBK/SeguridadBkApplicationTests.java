@@ -1,10 +1,10 @@
-package comProyectoFinalCiclo4.SegurityBE;
+package MinTic.Grupo32.SeguridadBK;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SegurityBeApplicationTests {
+class SeguridadBkApplicationTests {
 
 	@Test
 	void contextLoads() {

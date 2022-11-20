@@ -1,6 +1,6 @@
-package comProyectoFinalCiclo4.SegurityBE.Repositorios;
+package MinTic.Grupo32.SeguridadBK.Repositorios;
 
-import comProyectoFinalCiclo4.SegurityBE.Modelos.PermisosRol;
+import MinTic.Grupo32.SeguridadBK.Modelos.PermisosRol;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

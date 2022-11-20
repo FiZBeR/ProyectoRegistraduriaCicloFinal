@@ -1,8 +1,10 @@
-package comProyectoFinalCiclo4.SegurityBE.Repositorios;
+package MinTic.Grupo32.SeguridadBK.Repositorios;
 
-import comProyectoFinalCiclo4.SegurityBE.Modelos.Permiso;
+import MinTic.Grupo32.SeguridadBK.Modelos.Permiso;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.util.Optional;
 
 public interface PermisoRepositorio extends MongoRepository<Permiso, String> {
     @Query("{'url':?0, 'metodo':?1}")

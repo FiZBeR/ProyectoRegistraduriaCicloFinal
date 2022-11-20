@@ -1,4 +1,4 @@
-package comProyectoFinalCiclo4.SegurityBE.Modelos;
+package MinTic.Grupo32.SeguridadBK.Modelos;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document()
