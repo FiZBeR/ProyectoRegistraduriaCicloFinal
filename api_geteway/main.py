@@ -22,13 +22,13 @@ app.config["JWT_SECRET_KEY"] = "apigateway"
 jwt= JWTManager(app)
 
 
-#Obtencion de datos y verificación de datos
-@app.route("/login", methods=["POST"])
+#Obtencion de datos y verificación de datos--------------------------------------------------------------------------------
+@app.route("/login", methods=["POST"])#resivmos datos por eso usamos post
 def autentificacion():
-    datos = request.get_json()
-    urlBack = configData["url-backend-seguridad"]+'/usuarios/validar'
-    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
-    rta = request.post(urlBack, json=datos, headers=cabeceras)
+    datos = request.get_json() #enviamos formulario y que ibtenga los datos de este
+    urlBack = configData["url-backend-seguridad"]+'/usuarios/validar' #Invocamos la url para la autetificacion
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"} #
+    rta = request.post(urlBack, json=datos, headers=cabeceras) #utilizamos el request con el metodo puesto antes
     if rta.status_code == 200:
         usr = rta.json()
         #Creacion de token
@@ -38,12 +38,12 @@ def autentificacion():
     else:
         return jsonify({"Mensaje": "Usuario o clave incorrectos"}), 401
 
-
-@app.before_request
+#Aca lo que hacemos es ver si tiene o no permisos para la accion que quiere realizar----------------------------------------------
+@app.before_request #esta anoctacion hace que antes del requests vamos a ejecutar algo
 def before_request_callback():
-    endPoint = limpiarPath(request.path)
-    rutas_excluidas = ["/login"]
-    if rutas_excluidas.__contains__(endPoint):
+    endPoint = limpiarPath(request.path) #se define a donde se dirije y utilizamos el limpiarpath declarado mas adelante para que el metodo se entienda
+    rutas_excluidas = ["/login"]# aca lo que hacemos es exclir las rutas que no necesitamos que se validen
+    if rutas_excluidas.__contains__(endPoint):# y aca decimos si la ruta excluida es el endpoint siga de largo de lo contrario
         pass
     elif verify_jwt_in_request():
         usr = get_jwt_identity()
@@ -52,27 +52,88 @@ def before_request_callback():
             if not tieneAcceso:
                 return jsonify({"mensaje": "Permiso denegado"}), 401
             else:
-                return jsonify({"Mensaje":"Permiso denegado"}), 401
+                return jsonify({"Mensaje": "Permiso denegado"}), 401
 
-
-@app.route("/estudiantes",methods=['GET'])
-def getEstudiante():
-    print("Mico Servicio de Listar todos los estudiantes")
-    urlBack = configData["url-backend-transaccional"]+'/estudiantes'#elementos genericos que deberan tener cad microsercicio
+#-----------------------------------------------------------------------------------------------------------------------
+#Microservicios de Candidatos-------------------------------------------------------------------------------------------
+#Obtener
+@app.route("/candidatos",methods=['GET'])
+def getCandidatos():
+    print("Micro Servicio de Listar todos los estudiantes")
+    urlBack = configData["url-backend-transaccional"]+'/candidatos'#elementos genericos que deberan tener cad microsercicio
     cabeceras = {"Content-Type": "application/json; charset=uft-8"}
     rta = request.get(urlBack, headers = cabeceras)
     json = rta.json()
     return jsonify(json)
 
 
-#Toca colocar los 40 microservicos para validacion
+#Crear
+@app.route("/candidatos",methods=['POST'])
+def postCandidatos(id_cedula,Numero_resolucion, Nombre, Apellido):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    body = {
+        "id_cedula": id_cedula,
+        "Numero_resolucion": Numero_resolucion,
+        "Nombre": Nombre,
+        "Apellido": Apellido
+    }
+    rta = request.get(urlBack, json=body, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+
+#Borrar
+@app.route("/candidatos/<string:id_cedula>", methods=['DELETE'])
+def deleteCandidato(id_cedula):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = request.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+
+#Actualizar
+@app.route("/candidatos/<string:cedula>", methods=['PUT'])
+def updateCandidato(id_cedula,Numero_resolucion, Nombre, Apellido):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    body = {
+        "id_cedula": id_cedula,
+        "Numero_resolucion": Numero_resolucion,
+        "Nombre": Nombre,
+        "Apellido": Apellido
+    }
+    rta = request.get(urlBack, json=body, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+
+#Obtener Por id
+@app.route("/candidatos/<string:cedula>", methods=['GET'])
+def getCandidato(cedula):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = request.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+
+#Microservicios de Candidatos-------------------------------------------------------------------------------------------
+#Obtener
 
 
 
 
 
-def validarAcceso(idRol, url, metodo):
-    urlBack = configData["url-backend-seguridad"]+'PermisosRol/"validar-permiso/rol/' + str(idRol)
+#Toca colocar los 20 microservicos para validacion y en algunos debemos enviar un json como en validaracceso
+
+
+
+
+
+def validarAcceso(id_rol, url, metodo):
+    urlBack = configData["url-backend-seguridad"]+'PermisosRol/"validar-permiso/rol/' + str(id_rol)
     cabeceras = {"Content-Type": "application/json; charset=uft-8"}
     body = {
         "url":url,
@@ -87,7 +148,7 @@ def validarAcceso(idRol, url, metodo):
 
 
 
-# Remplazar y limpiar los id por ? para poder realizar bien el trabajo del API
+# Remplazar y limpiar los id por ? para poder realizar bien el trabajo del API--------------------------------------------------------
 def limpiarPath(url):
     secciones = url.split("/") #este metodo hace que al recibir la url o lo que le enviemos lo divida entre el caracter que le coloquemos
     for seccion in secciones:
@@ -99,7 +160,7 @@ def limpiarPath(url):
 
 
 
-
+#---------------------------------------------------------------------------------------------------------------------------------------
 
 
 @app.route("/",methods=['GET'])

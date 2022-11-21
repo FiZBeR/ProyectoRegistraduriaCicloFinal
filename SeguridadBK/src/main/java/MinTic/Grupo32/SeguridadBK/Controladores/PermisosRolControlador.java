@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin //Que son las referencias cruzadas
+@RestController
+//@RequestMapping("/roles")
 public class PermisosRolControlador {
     @Autowired
     private PermisosRolRepositorio repositorioPermisosRol;
@@ -23,7 +26,7 @@ public class PermisosRolControlador {
 
 
     //Crear
-    @PostMapping("rol/{id_rol}/permiso/{id_permiso}")
+    @PostMapping("/rol/{id_rol}/permiso/{id_permiso}")
     public PermisosRol create(@PathVariable String id_rol, @PathVariable String id_permiso){
         Permiso p = this.repositorioPermisos.findById(id_permiso).orElse(null);
         Rol r = this.repositorioRol.findById(id_rol).orElse(null);
@@ -38,7 +41,7 @@ public class PermisosRolControlador {
     }
 
 
-    @PutMapping("{id}/rol/{id_rol}/permiso/{id_permiso}")
+    @PutMapping("/{id}/rol/{id_rol}/permiso/{id_permiso}")
     public PermisosRol update(@PathVariable String id,
                               @PathVariable String id_rol,
                               @PathVariable String id_permiso){
@@ -54,20 +57,20 @@ public class PermisosRolControlador {
         }
     }
 
-    @GetMapping("")
+    @GetMapping("/permisosrol")
     public List<PermisosRol> index() {
 
         return this.repositorioPermisosRol.findAll();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/permisosrol/{id}")
     public PermisosRol show(@PathVariable String id){
         PermisosRol us = this.repositorioPermisosRol.findById(id).orElse(null);
         return us;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)/*Para lo quenos ayuda esta anotacion es para qu a nivel del cliente se responda que no se hayo contenido respecto al string solicitado*/
-    @DeleteMapping("{id}")
+    @DeleteMapping("/permisosrol/{id}")
     public void delete(@PathVariable String id){
         PermisosRol pr = this.repositorioPermisosRol.findById(id).orElse(null);
         if (pr != null) {
@@ -75,7 +78,7 @@ public class PermisosRolControlador {
         }
     }
 
-   /* @GetMapping("valida-permiso/rol/{id_rol}")
+   @GetMapping("valida-permiso/rol/{id_rol}")
     public PermisosRol getPermiso(@PathVariable String id_rol, @RequestBody Permiso dataPermiso){
         Rol r = this.repositorioRol.findById(id_rol);
         Permiso p = this.repositorioPermisos.getPermiso(dataPermiso.getUrl(), dataPermiso.getMetodo());
@@ -85,5 +88,5 @@ public class PermisosRolControlador {
         } else {
             return  null;
         }
-    }*/
+    }
 }

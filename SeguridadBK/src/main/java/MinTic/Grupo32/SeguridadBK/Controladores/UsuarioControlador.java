@@ -22,7 +22,7 @@ import java.util.List;
 
 @CrossOrigin //Que son las referencias cruzadas
 @RestController
-@RequestMapping("/usuarios")/*Aca estamos definiendo una ruta principal para los demas servicios con eso no las tenemos que volver a declarar si no para darle una extencion como es en el caso de la linea 46*/
+//@RequestMapping("/usuarios")/*Aca estamos definiendo una ruta principal para los demas servicios con eso no las tenemos que volver a declarar si no para darle una extencion como es en el caso de la linea 46*/
 public class UsuarioControlador {
 
     //Inyeccion de dependencias
@@ -32,19 +32,19 @@ public class UsuarioControlador {
     private RolRepositorio rolRepositorio;
 /*Microservicios de usuarios------------------------------------------------------------------------------------*/
     /*Obtener todo*/
-    @GetMapping("")
+    @GetMapping("/usuarios")
     public List<Usuario> index() {
 
         return this.repositorio.findAll();
     }
 /*Crear*/
-    @PostMapping
+    @PostMapping("/usuarios")
     public Usuario create(@RequestBody Usuario dataUsuario){ /*para poder utilizar los datos que vienen en la anotacion usamos requetbody*/
         dataUsuario.setClave(convertirSHA256(dataUsuario.getClave())); //que es convertirSHA256
         return this.repositorio.save(dataUsuario);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/usuarios/{id}")
     public Usuario update(@PathVariable String id, @RequestBody Usuario dataUsuario){
         Usuario usuario = this.repositorio.findById(id).orElse(null);
         if(usuario != null){
@@ -57,14 +57,14 @@ public class UsuarioControlador {
         }
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/usuarios/{id}")
     public Usuario show(@PathVariable String id){
         Usuario us = this.repositorio.findById(id).orElse(null);
         return us;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)/*Para lo quenos ayuda esta anotacion es para qu a nivel del cliente se responda que no se hayo contenido respecto al string solicitado*/
-    @DeleteMapping("{id}")
+    @DeleteMapping("/usuarios/{id}")
     public void delete(@PathVariable String id){
         Usuario us = this.repositorio.findById(id).orElse(null);
         if (us != null) {
@@ -86,7 +86,8 @@ public class UsuarioControlador {
         }
     }
 
-    /*Verificacion de Credenciales*/
+    
+    /*Verificacion de Credenciales por ApiGateway*/
     @PostMapping("/validar")
     public Usuario validar(@RequestBody Usuario usuario, final HttpServletResponse rta) throws IOException {
         Usuario usr = this.repositorio.getUsuarioPorCorreo(usuario.getCorreo());
@@ -96,14 +97,10 @@ public class UsuarioControlador {
             usr.setClave("");
             return  usr;
         } else {
-            rta.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            rta.sendError(HttpServletResponse.SC_UNAUTHORIZED);/*Para que sirve esta linea*/
             return null;
         }
     }
-
-
-
-
 
 
     //cifrado de clave

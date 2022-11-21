@@ -15,7 +15,7 @@ import java.util.List;
 
 @CrossOrigin //Que son las referencias cruzadas
 @RestController
-@RequestMapping("/roles")
+//@RequestMapping("/roles")
 public class RolControlador {
 
     /*@Autowired
@@ -25,17 +25,17 @@ public class RolControlador {
 
 
     /*Obtener todo*/
-    @GetMapping("")
+    @GetMapping("/roles")
     public List<Rol> index() {
         return this.rolRepositorio.findAll();
     }
     /*Crear*/
-    @PostMapping("")
+    @PostMapping("/roles")
     public Rol create(@RequestBody Rol dataRol){ /*para poder utilizar los datos que vienen en la anotacion usamos requetbody*/
         return this.rolRepositorio.save(dataRol);
     }
     /*actualizar*/
-    @PutMapping("{id}")
+    @PutMapping("/roles/{id}")
     public Rol update(@PathVariable String id, @RequestBody Rol dataRol){
         Rol rol = this.rolRepositorio.findById(id).orElse(null);
         if(rol != null){
@@ -47,14 +47,14 @@ public class RolControlador {
         }
     }
     /*Buscar por id*/
-    @GetMapping("{id}")
+    @GetMapping("/roles/{id}")
     public Rol show(@PathVariable String id){
         Rol rol = this.rolRepositorio.findById(id).orElse(null);
         return rol;
     }
     /*Borrar*/
     @ResponseStatus(HttpStatus.NO_CONTENT)/*Para lo quenos ayuda esta anotacion es para qu a nivel del cliente se responda que no se hayo contenido respecto al string solicitado*/
-    @DeleteMapping("{id}")
+    @DeleteMapping("/roles/{id}")
     public void delete(@PathVariable String id){
         Rol rl = this.rolRepositorio.findById(id).orElse(null);
         if (rl != null) {
