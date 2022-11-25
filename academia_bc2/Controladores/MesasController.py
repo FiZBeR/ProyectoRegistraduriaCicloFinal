@@ -22,20 +22,20 @@ class MesasController():
         #return candidato.__dict__ # __dict__ Esta funcion nos ayuda a que nos retirne una estructura tipo json
 
     #BORRADO
-    def delete(self, numero):
-        print("borrando estudiante: ", numero)
-        return self.MesasRepositorio.delete(numero)
+    def delete(self, id_numero):
+        print("borrando estudiante: ", id_numero)
+        return self.MesasRepositorio.deletMesa(id_numero)
 
     #ACTUALIZAR
-    def update(self, numero, mesa):
-        print("Actualizando al candidato: ", numero)
-        mesaActu = Mesas(self.MesasRepositorio.findById(numero))
-        mesaActu.numero = mesa["numero"]
+    def update(self, id_numero, mesa):
+        print("Actualizando al candidato: ", id_numero)
+        mesaActu = Mesas(self.MesasRepositorio.findByIdNumero(id_numero))
+        mesaActu.id_numero = mesa["id_numero"]
         mesaActu.candidatosInscritos = mesa["candidatosInscritos"]
         return self.MesasRepositorio.save(mesaActu) # Se retorna con un save para que en caso de que no exista este se cree
 
     #CONSULTAR
-    def show(self, numero):
-        print("Consultando candidato: ", numero)
-        mesa = Mesas(self.MesasRepositorio.findById(numero))
+    def show(self, id_numero):
+        print("Consultando candidato: ", id_numero)
+        mesa = Mesas(self.MesasRepositorio.findByIdNumero(id_numero))
         return mesa.__dict__

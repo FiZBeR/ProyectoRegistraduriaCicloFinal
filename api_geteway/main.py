@@ -1,6 +1,7 @@
 import datetime
 import re
 
+import requests as requests
 from flask import Flask
 from flask import jsonify #para que funciona
 from flask import request
@@ -28,7 +29,7 @@ def autentificacion():
     datos = request.get_json() #enviamos formulario y que ibtenga los datos de este
     urlBack = configData["url-backend-seguridad"]+'/usuarios/validar' #Invocamos la url para la autetificacion
     cabeceras = {"Content-Type": "application/json; charset=uft-8"} #
-    rta = request.post(urlBack, json=datos, headers=cabeceras) #utilizamos el request con el metodo puesto antes
+    rta = requests.post(urlBack, json=datos, headers=cabeceras) #utilizamos el request con el metodo puesto antes
     if rta.status_code == 200:
         usr = rta.json()
         #Creacion de token
@@ -62,7 +63,7 @@ def getCandidatos():
     print("Micro Servicio de Listar todos los estudiantes")
     urlBack = configData["url-backend-transaccional"]+'/candidatos'#elementos genericos que deberan tener cad microsercicio
     cabeceras = {"Content-Type": "application/json; charset=uft-8"}
-    rta = request.get(urlBack, headers = cabeceras)
+    rta = requests.get(urlBack, headers = cabeceras)
     json = rta.json()
     return jsonify(json)
 
@@ -78,7 +79,7 @@ def postCandidatos(id_cedula,Numero_resolucion, Nombre, Apellido):
         "Nombre": Nombre,
         "Apellido": Apellido
     }
-    rta = request.get(urlBack, json=body, headers=cabeceras)
+    rta = requests.get(urlBack, json=body, headers=cabeceras)
     json = rta.json()
     return jsonify(json)
 
@@ -88,7 +89,7 @@ def postCandidatos(id_cedula,Numero_resolucion, Nombre, Apellido):
 def deleteCandidato(id_cedula):
     urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
     cabeceras = {"Content-Type": "application/json; charset=uft-8"}
-    rta = request.get(urlBack, headers=cabeceras)
+    rta = requests.get(urlBack, headers=cabeceras)
     json = rta.json()
     return jsonify(json)
 
@@ -104,7 +105,7 @@ def updateCandidato(id_cedula,Numero_resolucion, Nombre, Apellido):
         "Nombre": Nombre,
         "Apellido": Apellido
     }
-    rta = request.get(urlBack, json=body, headers=cabeceras)
+    rta = requests.get(urlBack, json=body, headers=cabeceras)
     json = rta.json()
     return jsonify(json)
 
@@ -114,7 +115,7 @@ def updateCandidato(id_cedula,Numero_resolucion, Nombre, Apellido):
 def getCandidato(cedula):
     urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
     cabeceras = {"Content-Type": "application/json; charset=uft-8"}
-    rta = request.get(urlBack, headers=cabeceras)
+    rta = requests.get(urlBack, headers=cabeceras)
     json = rta.json()
     return jsonify(json)
 

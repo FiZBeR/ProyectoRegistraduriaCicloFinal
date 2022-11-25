@@ -12,10 +12,20 @@ class ResultadosController():
         self.repoPartido = PartidoPoliticoRepositorio
         self.repoResultados = Resultadosrepositorios
 
+    def findByIdR(self, id):
+        laColeccion = self.baseDatos[self.coleccion]
+        x = laColeccion.find_one({"id": id})
+
+        if x == None:
+            x = {}
+        else:
+            x["_id"] = x["_id"].__str__()
+        return x
+
     def create(self, dataResultados, id_cedula, id_codigo):
         resultado = Resultados(dataResultados)
-        candidato = Candidato(self.repoCandidato.findById(id_cedula))
-        partido = PartidoPolitico(self.repoPartido.findById(id_codigo))
+        candidato = Candidato(self.repoCandidato.findByIdCedula(id_cedula))
+        partido = PartidoPolitico(self.repoPartido.findByIdCodigo(id_codigo))
         resultado.candidato = candidato
         resultado.partido = partido
         return self.repoResultados.save(resultado)
@@ -28,9 +38,9 @@ class ResultadosController():
         print("borrando el resultado: ", id)
         return Resultadosrepositorios.delete(id)
 
-    def show(self, id):
+    def show(self, id_cedula):
         print("mostrando los resultado: ", id)
-        resultado = Resultadosrepositorios.findById(id)
+        resultado = Resultadosrepositorios.findByIdR(id_cedula)
         return resultado.__dict__
 
     def consultarInscritosCandidatos(self, id_cedula):

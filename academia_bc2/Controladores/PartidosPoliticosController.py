@@ -1,4 +1,5 @@
 # Departamento = Partidos
+from Modelos.Candidato import Candidato
 from Modelos.PartidoPolitico import PartidoPolitico
 from Repositorios.CandidatoRepositorio import CandidatoRepositorio
 from Repositorios.PartidoPoliticoRepositorio import PartidoPoliticoRepositorio
@@ -12,33 +13,29 @@ class PartidoPoliticoController():
 
     def index(self):
         print("Mostrando todos los Partidos Politicos")
-        return self.PartidoPoliticoRepositorio.findAll()
-
+        return PartidoPoliticoRepositorio.findAll()
 
     def create(self, unPartido):
-        print("Creando Un partido")
-        unPPolitico = PartidoPolitico(unPartido)
-        return self.PartidoPoliticoRepositorio.save(unPPolitico)
+        print("Creando un Partido")
+        partido = PartidoPolitico(unPartido)
+        print(partido)
+        return self.PartidoPoliticoRepositorio.save(partido)
+        return candidato.__dict__
 
 
-    def delete(self, codigo):
-        print("Borrando al partio Politico: ", codigo)
-        return PartidoPoliticoRepositorio.delete(codigo)
+    def delete(self, id_codigo):
+        print("Borrando al partio Politico: ", id_codigo)
+        return PartidoPoliticoRepositorio.deletCodigo(id_codigo)
 
-
-    def update(self, codigo, partidopolitico):
-        print("Actualizando al partido politico: ", codigo)
-        ppolitico = PartidoPolitico(self.PartidoPoliticoRepositorio.findById(codigo))
+    def update(self, id_codigo, partidopolitico):
+        print("Actualizando al partido politico: ", id_codigo)
+        ppolitico = PartidoPolitico(self.PartidoPoliticoRepositorio.findByIdCodigo(id_codigo))
         ppolitico.nombre = partidopolitico["nombre"]
         ppolitico.lema = partidopolitico["lema"]
-        ppolitico.codigo = partidopolitico["codigo"]
+        ppolitico.id_codigo = partidopolitico["id_codigo"]
         return self.PartidoPoliticoRepositorio.save(ppolitico)
 
-
-    def show(self, codigo):
-        print("Consultando al partido: ",codigo)
-        partidopolitico = PartidoPolitico(self.PartidoPoliticoRepositorio.findById(codigo))
+    def show(self, id_codigo):
+        print("Consultando al partido: ", id_codigo)
+        partidopolitico = PartidoPolitico(self.PartidoPoliticoRepositorio.findByIdCodigo(id_codigo))
         return partidopolitico.__dict__
-
-
-

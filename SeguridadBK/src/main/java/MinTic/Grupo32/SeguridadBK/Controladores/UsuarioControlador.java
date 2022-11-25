@@ -114,7 +114,7 @@ public class UsuarioControlador {
             return null;
         }
         byte[] hash = md.digest(clave.getBytes());
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(byte b : hash) {
             sb.append(String.format("%02x", b));
         }

@@ -21,35 +21,37 @@ class CandidatoController():
     def create(self, unCandidato):
         print("Creando un candidato")
         candidato = Candidato(unCandidato)
+        print(candidato)
         return self.CandidatoRepositorio.save(candidato)
-        return candidato.__dict__ # __dict__ Esta funcion nos ayuda a que nos retirne una estructura tipo json
+        return candidato.__dict__
+        # __dict__ Esta funcion nos ayuda a que nos retirne una estructura tipo json
 
     #BORRADO
-    def delete(self, cedula):
-        print("borrando estudiante: ", cedula)
-        return self.CandidatoRepositorio.delete(cedula)
+    def deleteCedula(self, id_cedula):
+        print("borrando estudiante: ", id_cedula)
+        return self.CandidatoRepositorio.deletCedula(id_cedula)
 
     #ACTUALIZAR
-    def update(self, cedula, candidato):
-        print("Actualizando al candidato: ", cedula)
-        candiActu = Candidato(self.CandidatoRepositorio.findById(cedula))
+    def update(self, id_cedula, candidato):
+        print("Actualizando al candidato: ", id_cedula)
+        candiActu = Candidato(self.CandidatoRepositorio.findByIdCedula(id_cedula))
         candiActu.partido = candidato["partido"]
         candiActu.numero_de_resolucion = candidato["numero de resolucion"]
-        candiActu.cedula = candidato["cedula"]
+        candiActu.id_cedula = candidato["id_cedula"]
         candiActu.nombre = candidato["nombre"]
         candiActu.apellido = candidato["apellido"]
         return self.CandidatoRepositorio.save(candiActu) # Se retorna con un save para que en caso de que no exista este se cree
 
     #CONSULTAR
-    def show(self, cedula):
-        print("Consultando candidato: ", cedula)
-        candidato = Candidato(self.CandidatoRepositorio.findById(cedula))
+    def show(self, id_cedula):
+        print("Consultando candidato: ", id_cedula)
+        candidato = Candidato(self.CandidatoRepositorio.findByIdCedula(id_cedula))
         return candidato.__dict__
 
-        #Relacion Partido Politico y Candidato clase del 21 minuto del 30 al 40 Explicacion 
+
     def asignarPartidoPolitico(self, id_cedula, id_codigo):
-        candidaActu = Candidato(self.CandidatoRepositorio.findById(id_cedula))#Obtener candidato
-        PartiActual = PartidoPolitico(self.PartidoPoliticoRepositorio.findById(id_codigo))#Obtener partido
+        candidaActu = Candidato(self.CandidatoRepositorio.findByIdCedula(id_cedula))#Obtener candidato
+        PartiActual = PartidoPolitico(self.PartidoPoliticoRepositorio.findByIdCodigo(id_codigo))#Obtener partido
         candidaActu.PartidoPolitico = PartiActual #Asignar Partido
         return self.CandidatoRepositorio.save(candidaActu)
 
