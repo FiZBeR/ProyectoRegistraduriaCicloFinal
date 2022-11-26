@@ -2,8 +2,9 @@ from Repositorios.RepositorioInterfase2 import RepositorioInterface
 from Modelos.Resultados import Resultados
 from bson import ObjectId
 
-class Resultadosrepositorios(RepositorioInterface[Resultados]):
+class ResultadosRepositorios(RepositorioInterface[Resultados]):
     pass
+
 
 
     def getInscritosCandidato(self, id_cedula):

@@ -39,7 +39,8 @@ public class UsuarioControlador {
     }
 /*Crear*/
     @PostMapping("/usuarios")
-    public Usuario create(@RequestBody Usuario dataUsuario){ /*para poder utilizar los datos que vienen en la anotacion usamos requetbody*/
+    public Usuario create(@RequestBody Usuario dataUsuario){/*para poder utilizar los datos que vienen en la anotacion usamos requetbody*/
+        System. out. println(dataUsuario.getClave());
         dataUsuario.setClave(convertirSHA256(dataUsuario.getClave())); //que es convertirSHA256
         return this.repositorio.save(dataUsuario);
     }
@@ -114,7 +115,7 @@ public class UsuarioControlador {
             return null;
         }
         byte[] hash = md.digest(clave.getBytes());
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         for(byte b : hash) {
             sb.append(String.format("%02x", b));
         }

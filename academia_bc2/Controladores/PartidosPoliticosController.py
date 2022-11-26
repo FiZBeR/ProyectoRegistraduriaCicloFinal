@@ -8,7 +8,7 @@ from Repositorios.PartidoPoliticoRepositorio import PartidoPoliticoRepositorio
 class PartidoPoliticoController():
     def __init__(self):
         print("Construyendo el controlador de partidos politicos")
-        self.PartidoPoliticoRepositorio = PartidoPoliticoRepositorio
+        self.PartidoPoliticoRepositorio = PartidoPoliticoRepositorio()
 
 
     def index(self):
@@ -20,7 +20,7 @@ class PartidoPoliticoController():
         partido = PartidoPolitico(unPartido)
         print(partido)
         return self.PartidoPoliticoRepositorio.save(partido)
-        return candidato.__dict__
+        return partido.__dict__
 
 
     def delete(self, id_codigo):

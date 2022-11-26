@@ -3,14 +3,15 @@ from Modelos.PartidoPolitico import PartidoPolitico
 from Modelos.Resultados import Resultados
 from Repositorios.CandidatoRepositorio import CandidatoRepositorio
 from Repositorios.PartidoPoliticoRepositorio import PartidoPoliticoRepositorio
-from Repositorios.ResultadosRepositorio import Resultadosrepositorios
+from Repositorios.ResultadosRepositorio import ResultadosRepositorios
 
 class ResultadosController():
     def __init__(self):
         print("Creando el controlador de Resultados")
-        self.repoCandidato = CandidatoRepositorio
-        self.repoPartido = PartidoPoliticoRepositorio
-        self.repoResultados = Resultadosrepositorios
+        self.CandidatoRepositorio = CandidatoRepositorio()
+        self.PartidoPoliticoRepositorio = PartidoPoliticoRepositorio()
+        self.ResultadosRepositorios = ResultadosRepositorios()
+
 
     def findByIdR(self, id):
         laColeccion = self.baseDatos[self.coleccion]
@@ -24,37 +25,37 @@ class ResultadosController():
 
     def create(self, dataResultados, id_cedula, id_codigo):
         resultado = Resultados(dataResultados)
-        candidato = Candidato(self.repoCandidato.findByIdCedula(id_cedula))
-        partido = PartidoPolitico(self.repoPartido.findByIdCodigo(id_codigo))
+        candidato = Candidato(self.CandidatoRepositorio.findByIdCedula(id_cedula))
+        partido = PartidoPolitico(self.PartidoPoliticoRepositorio.findByIdCodigo(id_codigo))
         resultado.candidato = candidato
         resultado.partido = partido
-        return self.repoResultados.save(resultado)
+        return self.ResultadosRepositorios.save(resultado)
 
     def index(self):
         print("mostrando todos los resultados")
-        return self.ResultadosRepositorio.findAll()
+        return self.ResultadosRepositorios.findAll()
 
     def delete(self, id):
         print("borrando el resultado: ", id)
-        return Resultadosrepositorios.delete(id)
+        return ResultadosRepositorios.delete(id)
 
-    def show(self, id_cedula):
+    def show(self, id):
         print("mostrando los resultado: ", id)
-        resultado = Resultadosrepositorios.findByIdR(id_cedula)
+        resultado = ResultadosRepositorios.findByIdR(id)
         return resultado.__dict__
 
-    def consultarInscritosCandidatos(self, id_cedula):
+    def consultarInscritosCandidatos(self, id):
         print("Consulatando Inscritos de los candidatos")
-        return self.repoResultados.getInscritosCandidato(id_cedula)
+        return self.ResultadosRepositorios.getInscritosCandidato(id)
 
     def consultarMayorCandidato(self):
         print("Consultando el canidato mas votado")
-        return self.repoResultados.getMayorVotacion()
+        return self.ResultadosRepositorios.getMayorVotacion()
 
-    def consultarPromedioCAndidato(self, id_cedula):
+    def consultarPromedioCAndidato(self, id):
         print("Consultando promedio candidatos")
-        return self.repoResultados.getVotacionPromedio(id_cedula)
+        return self.ResultadosRepositorios.getVotacionPromedio(id)
 
-    def consulatrSumatoriaVotos(self, id_cedula):
+    def consulatrSumatoriaVotos(self, id):
         print("Consultando la sumatoria de los votos")
-        return self.repoResultados.getNSumatoriaVotos(id_cedula)
+        return self.ResultadosRepositorios.getNSumatoriaVotos(id)

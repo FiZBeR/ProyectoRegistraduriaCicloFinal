@@ -14,7 +14,7 @@ from Controladores.ResultadosController2 import ResultadosController
 
 controladorCandidato = CandidatoController()
 controladorPartidoPoli = PartidoPoliticoController()
-controladorResultados = ResultadosController
+controladorResultados = ResultadosController()
 
 #
 app=Flask(__name__)
@@ -148,10 +148,10 @@ from Controladores.ResultadosController2 import ResultadosController
 controladorResultados = ResultadosController()
 
 #Crearcion
-@app.route("/resultados", methods=['POST'])
-def crearResultados():
+@app.route("/resultados/candidatos/<string:id_cedula>/partidopolitico/<string:id_codigo>", methods=['POST'])
+def crearResultados(id_cedula, id_codigo):
     datos = request.get_json()
-    json = controladorResultados.create(datos)
+    json = controladorResultados.create(datos, id_cedula, id_codigo)
     return jsonify(json)
 
 #Listado
