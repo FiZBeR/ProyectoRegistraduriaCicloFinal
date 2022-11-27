@@ -73,13 +73,8 @@ def getCandidatos():
 def postCandidatos(id_cedula,Numero_resolucion, Nombre, Apellido):
     urlBack = configData["url-backend-transaccional"] + '/candidatos'
     cabeceras = {"Content-Type": "application/json; charset=uft-8"}
-    body = {
-        "id_cedula": id_cedula,
-        "Numero_resolucion": Numero_resolucion,
-        "Nombre": Nombre,
-        "Apellido": Apellido
-    }
-    rta = requests.get(urlBack, json=body, headers=cabeceras)
+    datos = request.get_json()
+    rta = requests.post(urlBack, json=datos, headers=cabeceras)
     json = rta.json()
     return jsonify(json)
 
@@ -120,18 +115,207 @@ def getCandidato(cedula):
     return jsonify(json)
 
 
-#Microservicios de Candidatos-------------------------------------------------------------------------------------------
-#Obtener
+#Microservicios de Partido Politico-------------------------------------------------------------------------------------------
+#Asignar partido
+@app.route("/partidopoliticos/<string:id_codigo>/candidato/<string:id_cedula>", methods=['PUT'])
+def asignarpartidoPoli(id_codigo, id_cedula):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
 
+#Crear
+@app.route("/partidopolitico", methods=['POST'])
+def crearResultado(Nombre, id_codigo, Lema):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    datos = request.get_json()
+    rta = requests.post(urlBack,headers=cabeceras, json=datos)
+    json = rta.json()
+    return jsonify(json)
 
+#Listado
+@app.route("/partidopolitico", methods=['GET'])
+def getPartidos():
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
 
+#Borrar
+@app.route("/partidopolitico/<string:id_codigo>", methods=['DELETE'])
+def borrarPartido(id_codigo):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
 
+#Actualizar
+@app.route("/partidopolitico/<string:id_codigo>", methods=['PUT'])
+def actualizarPartido(Nombre, Lema):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    body = {
+        "Nombre": Nombre,
+        "Lema": Lema
+    }
+    rta = requests.put(urlBack, headers=cabeceras, json=body)
+    json = rta.json()
+    return jsonify(json)
 
-#Toca colocar los 20 microservicos para validacion y en algunos debemos enviar un json como en validaracceso
+#Consular
+@app.route("/partidopolitico/<string:id_codigo>", methods=['GET'])
+def getPartido(id_codigo):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
 
+#Microservicios de mesa-------------------------------------------------------------------------------------------
+#crear
 
+@app.route("/mesas", methods=['POST'])
+def crearMesas():
+    print("Micro Servicio de Crear una mesa")
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    datos = request.get_json()
+    rta = requests.post(urlBack, headers = cabeceras, json=datos)
+    json = rta.jason()
+    return jsonify(json)
 
+#Listar
+@app.route("/mesas", methods=['GET'])
+def getMesas():
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
 
+#Borrar
+@app.route("/mesas/<string:id_numero>", methods=['DELETE'])
+def borrarMesas(id_numero):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+#Actulizar
+@app.route("/mesas/<string:id_numero>", methods=['PUT'])
+def actualizarMesas(id_numero, numero, cantidad_inscritos):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    body = {
+        "numero": numero,
+        "cantidad_inscritos": cantidad_inscritos
+    }
+    rta = requests.put(urlBack, headers=cabeceras, json=body)
+    json = rta.json()
+    return jsonify(json)
+
+#ListarPOrID
+@app.route("/mesas/<string:id_numero>", methods=['GET'])
+def getMesa(id_numero):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+#Microservicios de mesa-------------------------------------------------------------------------------------------
+#crear
+
+@app.route("/resultados/candidatos/<string:id_cedula>/partidopolitico/<string:id_codigo>", methods=['POST'])
+def crearResultados(id, Numero_votos, id_codigo):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    body = {
+        "id": id,
+        "Numero_votos": Numero_votos,
+        "id_codigo": id_codigo
+    }
+    rta = requests.get(urlBack, headers=cabeceras, json=body)
+    json = rta.json()
+    return jsonify(json)
+
+#Listado
+@app.route("/resultados", methods=['GET'])
+def getResultados():
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+#Borrar
+@app.route("/resultados/<string:id>", methods=['DELETE'])
+def borrarResultados(id):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+#Actualizar
+@app.route("/resultados/<string:id>", methods=['PUT'])
+def actualizarResultados(id, Numero_votos, id_codigo):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    body = {
+        "Numero_votos": Numero_votos,
+        "id_codigo": id_codigo
+    }
+    rta = requests.get(urlBack, headers=cabeceras, json=body)
+    json = rta.json()
+    return jsonify(json)
+
+#Consulta
+@app.route("/resultados/<string:id>", methods=['GET'])
+def getResultado(id):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+# Microservisios de consultas especiales----------------------------------------------------------
+
+@app.route("/resultados/candidato/<string:id_cedula>", methods=['GET'])
+def isncritosEnCandiadtos(id_cedula):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+@app.route("/resultados/Promedio_notas/<string:id_cedula>", methods=['GET'])
+def promediocandidatos(id_cedula):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+@app.route("/resultados/candidato", methods=['GET'])
+def mejorVotacionEnCandidato(id_cedula):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
+
+@app.route("/inscripciones/Sumatoria_notas/<string:id_cedula>", methods=['GET'])
+def mayorSumatoria(id_cedula):
+    urlBack = configData["url-backend-transaccional"] + '/candidatos/<string:cedula>'
+    cabeceras = {"Content-Type": "application/json; charset=uft-8"}
+    rta = requests.get(urlBack, headers=cabeceras)
+    json = rta.json()
+    return jsonify(json)
 
 def validarAcceso(id_rol, url, metodo):
     urlBack = configData["url-backend-seguridad"]+'PermisosRol/"validar-permiso/rol/' + str(id_rol)

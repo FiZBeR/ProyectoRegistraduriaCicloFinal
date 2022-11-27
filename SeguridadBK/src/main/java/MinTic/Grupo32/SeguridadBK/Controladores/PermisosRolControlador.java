@@ -15,13 +15,13 @@ import java.util.List;
 
 @CrossOrigin //Que son las referencias cruzadas
 @RestController
-//@RequestMapping("/roles")
+@RequestMapping("/roles")
 public class PermisosRolControlador {
-    @Autowired
+
     private PermisosRolRepositorio repositorioPermisosRol;
     @Autowired
     private PermisoRepositorio repositorioPermisos;
-    @Autowired
+
     private RolRepositorio repositorioRol;
 
 
@@ -41,7 +41,7 @@ public class PermisosRolControlador {
     }
 
 
-    @PutMapping("/{id}/rol/{id_rol}/permiso/{id_permiso}")
+    @PutMapping("roles/{id}/rol/{id_rol}/permiso/{id_permiso}")
     public PermisosRol update(@PathVariable String id,
                               @PathVariable String id_rol,
                               @PathVariable String id_permiso){
@@ -89,4 +89,5 @@ public class PermisosRolControlador {
             return  null;
         }
     }*/
+
 }

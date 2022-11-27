@@ -199,7 +199,7 @@ def isncritosEnCandiadtos(id_cedula):
     json = controladorResultados.consultarInscritosCandidatos(id_cedula)
     return jsonify(json)
 
-@app.route("/resultados/candidato", methods=['GET'])
+@app.route("/resultados/candidato/<string:id_cedula>", methods=['GET'])
 def mejorVotacionEnCandidato(id_cedula):
     json = controladorResultados.consultarMayorCandidato(id_cedula)
     return jsonify(json)
